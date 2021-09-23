@@ -1,0 +1,79 @@
+//Configurando o tabuleiro
+
+int size = 4;
+int cols = 600/size; //setando colunas
+int rows = 600/size; //setado fileiras
+int [][] board = new int[cols][rows];
+{
+  for (int y=0; y<rows; y++) {
+    for (int x=0; x<cols; x++) {
+      board[x][y]=int(random(2));
+    }
+  }
+}
+
+
+//Configurando a tela
+void setup() { //função chamada para configuração.
+  size(600, 600); //Tamanho em pixels.
+  frameRate(24); //taxa de quadros Fps.
+}
+
+//Desenhando na tela
+
+void draw() {
+  background(0);
+
+
+  int [][] next = new int[cols][rows];
+  for (int y=1; y<rows-1; y++) {
+    for (int x=1; x<cols-1; x++) {
+      int neighbours = countNeighbours(x, y);
+      next[x][y] = ruleOfLife(board[x][y], neighbours);
+    }
+  }
+  board = next;
+  drawBoard();
+}
+
+void mousePressed() {
+  int cellX = mouseX / size;
+  int cellY = mouseY / size;
+  board[cellX][cellY] = 1-board[cellX][cellY];
+}
+
+
+//Contando o número de vizinhos
+
+int countNeighbours(int x, int y) {
+  int neighbours = 0;
+  for (int i=-1; i<=1; i++) {
+    for (int j=-1; j<=1; j++) {
+      neighbours += board[x+j][y+1];
+    }
+  }
+  neighbours -= board[x][y];
+  return(neighbours);
+}
+
+//aplicando as regras da vida
+int ruleOfLife(int status, int neighbours) {
+  if (status == 1 && neighbours > 3) return(0); //superpopulação
+  else if (status == 1 && neighbours < 2) return(0); //pouca população
+  else if (status == 0 && neighbours == 3) return(1); //reprodução
+  else return(status);
+}
+
+//desenhando o tabuleiro na tela
+void drawBoard() {
+  for (int y=0; y<rows; y++) {
+    for (int x=0; x<cols; x++) {
+      if (board[x][y]==1) {
+        fill(192);
+      } else {
+        fill(64);
+      }
+      rect(x*size, y*size, size, size);
+    }
+  }
+}
