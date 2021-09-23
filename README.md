@@ -11,5 +11,5 @@ https://processing.org/download
 - Copiar o código do repositório e colar na IDE.
 
 
-
+Referências: https://pt.wikipedia.org/wiki/Jogo_da_vida
 
